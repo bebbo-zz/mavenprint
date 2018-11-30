@@ -1,1 +1,5 @@
+com/graffl/maven/ReceiptPrinter/ReceiptToPrint.class
+com/graffl/maven/ReceiptPrinter/LoadPrintRequests.class
+com/graffl/maven/ReceiptPrinter/ReceiptEntry.class
 com/graffl/maven/ReceiptPrinter/App.class
+com/graffl/maven/ReceiptPrinter/PrintJob.class

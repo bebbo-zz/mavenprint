@@ -15,9 +15,10 @@ import com.google.firebase.cloud.FirestoreClient;
 
 public class LoadPrintRequests {
 
-	public ReceiptToPrint[] allForPrint;
+	public List<QueryDocumentSnapshot> documents;
 	
 	public LoadPrintRequests() {
+		
 		// Use a service account
 	    InputStream serviceAccount = App.class.getResourceAsStream("/ServiceAccountKey.json");
 	    GoogleCredentials credentials = null;
@@ -35,7 +36,7 @@ public class LoadPrintRequests {
 	    Firestore db = FirestoreClient.getFirestore();
 	    
 	 // asynchronously retrieve all users
-	    ApiFuture<QuerySnapshot> query = db.collection("orders").get();
+	    ApiFuture<QuerySnapshot> query = db.collection("prints").get();
 	    // ...
 	    // query.get() blocks on response
 	    QuerySnapshot querySnapshot = null;
@@ -48,14 +49,6 @@ public class LoadPrintRequests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-	    for (QueryDocumentSnapshot document : documents) {
-	      System.out.println("User: " + document.getId());
-	      System.out.println("First: " + document.getString("created"));
-	      if (document.contains("middle")) {
-	        System.out.println("Middle: " + document.getString("middle"));
-	      }
-	      System.out.println("Last: " + document.getString("receiptId"));
-	    }
+	    this.documents = querySnapshot.getDocuments();
 	}	
 }
