@@ -2,7 +2,16 @@ package com.graffl.maven.ReceiptPrinter;
 
 public class StringConverter {
 	
-	public byte nextString(char nextChar) {
+	public byte[] getBytesConverted(String text) {
+		final int len = text.length();
+		byte[] tempBytes = new byte[len];
+		for (int i = 0; i < len; i++) {
+	        tempBytes[i] = convertChar(text.charAt(i));
+	    }
+		return tempBytes;
+	}
+	
+	public byte convertChar(char nextChar) {
 		byte nextByte;
 		switch (nextChar) {
 			case 'ă': 	nextByte = (byte) 0xa8;

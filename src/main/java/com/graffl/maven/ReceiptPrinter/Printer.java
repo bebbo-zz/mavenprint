@@ -3,6 +3,7 @@ package com.graffl.maven.ReceiptPrinter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.text.DecimalFormat;
 
 public class Printer {
 	
@@ -24,7 +25,10 @@ public class Printer {
 	   public static final byte[] TXT_BOLD_OFF    = {0x1b,0x45,0x00}; // Bold font OFF
 	   public static final byte[] TXT_BOLD_ON     = {0x1b,0x45,0x01}; // Bold font ON
 	   public static final byte[] TXT_FONT_A      = {0x1b,0x4d,0x48}; // Font type A
-	   public static final byte[] TXT_FONT_B      = {0x1b,0x4d,0x01};// Font type B
+	   public static final byte[] TXT_FONT_B      = {0x1b,0x4d,0x49};// Font type B
+	   public static final byte[] TXT_FONT_C      = {0x1b,0x4d,0x50}; // Font type C
+	   public static final byte[] TXT_FONT_D      = {0x1b,0x4d,0x51};// Font type D
+	   public static final byte[] TXT_FONT_E      = {0x1b,0x4d,0x52}; // Font type E
 	   public static final byte[] TXT_ALIGN_LT    = {0x1b,0x61,0x00}; // Left justification
 	   public static final byte[] TXT_ALIGN_CT    = {0x1b,0x61,0x01}; // Centering
 	   public static final byte[] TXT_ALIGN_RT    = {0x1b,0x61,0x02}; // Right justification
@@ -62,7 +66,6 @@ public class Printer {
 	
 	public void cut() {
 		try {
-			this.lineFeed(3);
 			this.printer.write(PAPER_FULL_CUT);
 		} catch (IOException e) {
 	         e.printStackTrace();
@@ -86,6 +89,14 @@ public class Printer {
 	    }
 	}
 	
+	public void writeByte(byte[] bytetext) {
+		try {
+			this.printer.write(bytetext);
+		} catch (IOException e) {
+	         e.printStackTrace();
+	    }
+	}
+	
 	public void write(String text) {
 		try {
 			this.printer.write(text.getBytes());
@@ -99,14 +110,14 @@ public class Printer {
 			this.printer.write(TXT_BOLD_ON);
 			this.printer.write(TXT_2HEIGHT);
 			this.printer.write(TXT_2WIDTH);
-			this.printer.write(TXT_FONT_A);
-			this.printer.write(TXT_ALIGN_CT);
+			this.printer.write(TXT_FONT_D);
+			this.adjustText("center");
 			this.writeLine("HANG DUC");
 			this.printer.write(CTL_LF);
 			this.printer.write(TXT_BOLD_OFF);
 			this.printer.write(TXT_NORMAL);
-			this.printer.write(TXT_FONT_B);
-			this.printer.write(TXT_ALIGN_LT);
+			this.printer.write(TXT_FONT_A);
+			this.adjustText("left");
 			
 		} catch (IOException e) {
 	         e.printStackTrace();
@@ -123,37 +134,82 @@ public class Printer {
 	    }
 	}
 	
-	private String longConverter(long amount) {
-		return String.format("%1$,.2f", amount);
-	}	
-	
+	private void adjustText(String alignment) {
+		try {
+			if (alignment.equals("center")) {
+				this.printer.write(TXT_ALIGN_CT);
+			} else if (alignment.equals("right")) {
+				this.printer.write(TXT_ALIGN_RT);
+			} else {
+				this.printer.write(TXT_ALIGN_LT);
+			}
+		} catch (IOException e) {
+	         e.printStackTrace();
+	    }
+	}
+
 	public void writeEntry(ReceiptEntry prod) {
-		this.lineFeed(1);
-		this.write(Long.toString(prod.quantity));
-		this.write(" X ");
-		String strAmount = String.format("%1$", Long.toString(prod.price));
-		this.writeLine(strAmount + " d");
+		this.adjustText("left");
+		StringConverter converter = new StringConverter();
+		DecimalFormat decimalFormat = new DecimalFormat("#,##0");
 		
+		this.lineFeed(1);
 		// write name
-		if(prod.name.length() > 24) {
-			this.write(prod.name.substring(0, 24));
+		int maxLength = 31;
+		if(prod.name.length() > maxLength) {
+			this.writeByteLine(converter.getBytesConverted(prod.name.substring(0, maxLength)));
 		} else {
-			this.write(prod.name);
-			this.write(this.getNspaces(24 - prod.name.length()));
+			this.writeByteLine(converter.getBytesConverted(prod.name));
 		}
-		this.writeLine(" ");
+		
+		// write single unit and total price
+		int countchars = 0;
+		String strQuantity = decimalFormat.format(prod.quantity);
+		String strSinglePrice = decimalFormat.format(prod.price);
+		String strTotal = decimalFormat.format(prod.total);
+		countchars = strQuantity.length() + strSinglePrice.length() + strTotal.length();
+		
+		this.write(strQuantity);
+		this.write(" X ");
+		this.write(strSinglePrice);
+		this.writeByte(converter.getBytesConverted(" đ"));
+		this.write(this.getNspaces(40 - countchars - 5));
+		this.write(strTotal);
+		this.writeByteLine(converter.getBytesConverted(" đ"));
 	}
 	
 	public void writeSum(long amount) {
 		try {
+			this.lineFeed(2);
 			this.printer.write(TXT_BOLD_ON);
 			this.printer.write(TXT_2WIDTH);
-			this.writeLine("Total Sum: " + this.longConverter(amount));
+			StringConverter converter = new StringConverter();
+			DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+			this.adjustText("left");
+			// 21 characters because double width
+			this.write("Total ");
+			String strAmount = decimalFormat.format(amount);
+			String nSpaces = this.getNspaces(21 - 5 - 3 - strAmount.length());
+			this.write(nSpaces + strAmount);
+			this.writeByteLine(converter.getBytesConverted(" đ"));
 			this.printer.write(TXT_BOLD_OFF);
 			this.printer.write(TXT_NORMAL);
+			this.lineFeed(2);
 		} catch (IOException e) {
 	         e.printStackTrace();
 	    }
+	}
+	
+	public void writeAmount(String description, Long amount) {
+		StringConverter converter = new StringConverter();
+		DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+		this.adjustText("left");
+		this.write(description + ": ");
+		String strAmount = decimalFormat.format(amount);
+		String nSpaces = this.getNspaces(42 - description.length() - 4 - strAmount.length());
+		this.write(nSpaces + strAmount);
+		this.writeByteLine(converter.getBytesConverted(" đ"));
+		this.lineFeed(1);
 	}
 	
 	private String getNspaces(int n) {

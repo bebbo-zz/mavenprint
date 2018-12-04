@@ -9,6 +9,8 @@ public class ReceiptEntry {
 	public Long quantity;
 	
 	public Long price;
+	
+	public Long total;
 
 	public ReceiptEntry() {
 		
@@ -29,6 +31,15 @@ public class ReceiptEntry {
 		}catch (Exception e) {
 			e.printStackTrace();
 			this.price = (long) 0;
+		}
+	}
+	
+	public void setTotal(Object _obj) {
+		try {
+			this.total = (Long) _obj;
+		}catch (Exception e) {
+			e.printStackTrace();
+			this.total = (long) 0;
 		}
 	}
 	

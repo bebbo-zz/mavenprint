@@ -14,9 +14,9 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-
-        LoadPrintRequests loadRequests = new LoadPrintRequests();
         
+        LoadPrintRequests loadRequests = new LoadPrintRequests();
+
         Printer printer = null;
         List<QueryDocumentSnapshot> documents = loadRequests.documents;
         if(documents.size() > 0) {
@@ -29,7 +29,7 @@ public class App
       	      receipt.setOrderid(doc.get("orderId"));
       	      receipt.setProducts(doc.get("products"));
       	      receipt.setTotalSum(doc.get("totalPrice"));
-      	      receipt.setTotalSum(doc.get("moneyPaid"));
+      	      receipt.setTotalPaid(doc.get("moneyPaid"));
       	      receipt.setTotalChange();
       	      
       	      receipt.print(printer);

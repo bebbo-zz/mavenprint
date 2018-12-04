@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ReceiptToPrint {
 	
@@ -41,6 +42,7 @@ public class ReceiptToPrint {
 	      productEntry.name = prod.get("name").toString();
 	      productEntry.setQuantity(prod.get("quantity"));
 	      productEntry.price = (Long) prod.get("price");
+	      productEntry.total = (Long) prod.get("total");
 		
 	      this.products.add(productEntry);
 		}
@@ -52,7 +54,7 @@ public class ReceiptToPrint {
 	
 	public void setTotalSum(Object _obj) {
 		try {
-	    	  this.totalSum = (Long) _obj;
+	    	  this.totalSum = Long.parseLong(_obj.toString());
 	    }catch (Exception e) {
 	    	  System.out.println("Converting issue");
 	    	  // manuell berechnen
@@ -62,7 +64,7 @@ public class ReceiptToPrint {
 	
 	public void setTotalPaid(Object _obj) {
 		try {
-	    	  this.totalPaid = (Long) _obj;
+	    	  this.totalPaid = Long.parseLong(_obj.toString());
 	    }catch (Exception e) {
 	    	  System.out.println("Converting issue");
 	    	  // assume same amount as invoice
@@ -79,37 +81,8 @@ public class ReceiptToPrint {
 	}
 	
 	public void print(Printer printer) {
-		printer.lineFeed(20);
+		printer.lineFeed(10);
 		printer.setVietnamese();
-		
-		try {
-			printer.writeByteLine(("Mẹo: Tìm kiếm chỉ kết quả tiếng Việt.").getBytes("Cp1258"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		printer.lineFeed(4);
-		
-		try {
-			printer.writeByteLine(("Mẹo: Tìm kiếm chỉ kết quả tiếng Việt.").getBytes("ISO-8859-1"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		printer.lineFeed(4);
-		
-		try {
-			printer.writeByteLine(("Mẹo: Tìm kiếm chỉ kết quả tiếng Việt.").getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		printer.lineFeed(4);
-		
-		//byte[] someletters = {0x1d,0x56,0x01};
-		byte[] someletters2 = {(byte)0xb5,(byte)0xa9,(byte)0xf9};
-		printer.writeByteLine(someletters2);
-		printer.lineFeed(4);
 		
 		printer.writeHeader();
 		
@@ -124,9 +97,19 @@ public class ReceiptToPrint {
 		}
 		
 		printer.writeSum(this.totalSum);
-		printer.writeLine("Paid: " + Long.toString(this.totalPaid));
-		printer.writeLine("Change: " + Long.toString(this.totalChange));
+		printer.writeAmount("Paid", this.totalPaid);
+		printer.writeAmount("Change", this.totalChange);
 		
+		printer.lineFeed(10);
+		printer.lineFeed(10);
+		printer.lineFeed(10);
+		printer.lineFeed(10);
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		printer.cut();
 	}
 }
