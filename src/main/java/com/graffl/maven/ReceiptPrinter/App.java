@@ -13,8 +13,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
-        
         LoadPrintRequests loadRequests = new LoadPrintRequests();
 
         Printer printer = null;
@@ -30,11 +28,12 @@ public class App
       	      receipt.setProducts(doc.get("products"));
       	      receipt.setTotalSum(doc.get("totalPrice"));
       	      receipt.setTotalPaid(doc.get("moneyPaid"));
-      	      receipt.setTotalChange();
+      	      receipt.setTotalChange(doc.get("moneyChange"));
       	      
       	      receipt.print(printer);
+      	      
+      	      document.getReference().delete();
       	    }
-        	
         	printer = null;
         }  
     }

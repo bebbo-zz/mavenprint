@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="com.graffl.maven.ReceiptPrinter.AppTest" time="0.005" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.graffl.maven.ReceiptPrinter.AppTest" time="3.072" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="10+46"/>
@@ -26,7 +26,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
-    <property name="classworlds.conf" value="/Users/maddin/Documents/Development/Java/Workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf6142658594143211260.tmp"/>
+    <property name="classworlds.conf" value="/Users/maddin/Documents/Development/Java/Workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf1570916538825543540.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/maddin/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="jdk.debug" value="release"/>
@@ -63,5 +63,5 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.graffl.maven.ReceiptPrinter.AppTest" name="testApp" time="0.005"/>
+  <testcase classname="com.graffl.maven.ReceiptPrinter.AppTest" name="testApp" time="3.072"/>
 </testsuite>

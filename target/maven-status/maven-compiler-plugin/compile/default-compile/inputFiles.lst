@@ -1,6 +1,7 @@
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/App.java
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/ReceiptEntry.java
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/Printer.java
+/Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/StringConverter.java
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/ReceiptToPrint.java
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/LoadPrintRequests.java
 /Users/maddin/Documents/Development/Java/Workspace/ReceiptPrinter/src/main/java/com/graffl/maven/ReceiptPrinter/PrintJob.java

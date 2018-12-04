@@ -72,8 +72,14 @@ public class ReceiptToPrint {
 	    }
 	}
 	
-	public void setTotalChange() {
-		this.totalChange = this.totalPaid - this.totalSum;
+	public void setTotalChange(Object _obj) {
+		try {
+	    	  this.totalChange = Long.parseLong(_obj.toString());
+	    }catch (Exception e) {
+	    	  System.out.println("Converting issue");
+	    	  // assume same amount as invoice
+	    	  this.totalChange = 0;
+	    }
 	}
 	
 	public long calculateManually() {

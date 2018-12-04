@@ -1,4 +1,5 @@
 com/graffl/maven/ReceiptPrinter/ReceiptToPrint.class
+com/graffl/maven/ReceiptPrinter/StringConverter.class
 com/graffl/maven/ReceiptPrinter/LoadPrintRequests.class
 com/graffl/maven/ReceiptPrinter/App.class
 com/graffl/maven/ReceiptPrinter/Printer.class
